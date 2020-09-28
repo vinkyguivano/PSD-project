@@ -1,0 +1,82 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Navbar.master.cs" Inherits="PSDAssignment.Views.Navbar" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<link rel="stylesheet" type="text/css" href="../Assets/Styles/bootstrap.css" />
+<head runat="server">
+    <title></title>
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        
+       <nav class="navbar navbar-expand-lg navbar-light bg-success">
+  <a class="navbar-brand" href="Home.aspx">TokoBedia</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+      
+          <li style="margin: 0px 5px;" />
+          <li class="nav-item">
+                        <a class="nav-link" href="ViewProduct.aspx">View Products<span class="sr-only"></span></a>
+                      </li>
+          <% if (Session["auth_user"]!= null) {%>
+             <%if(PSDAssignment.Repository.UserRepository.getUserByID(Convert.ToInt32(Session["auth_user"])).RoleID == 3)
+              {%>
+                      <li class="nav-item">
+                        <a class="nav-link" href="AddProduct.aspx">Add Products<span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="ProductType.aspx">View Product Type</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="AddProductType.aspx">Add Product Type</a>
+                      </li>
+                       <li class="nav-item">
+                        <a class="nav-link" href="UserPage.aspx">User</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="ViewPaymentType.aspx">View Payment Type</a>
+                      </li>
+                      <%}%>
+              <%}%>
+           <% if (Session["auth_user"] == null)
+                        { %>
+                        
+                        <li style="margin: 0px 5px;"><a href="Login.aspx" style="text-decoration: none;">Login</a></li>
+                        <li style="margin: 0px 5px;"><a href="Register.aspx" style="text-decoration: none;">Register</a></li>
+                 
+          <%} %>
+          <% else if (Session["auth_user"] != null){ %>
+                        <asp:HyperLink ID="UserName" runat="server" CssClass="text-white" style="font-size:1.7rem"></asp:HyperLink>
+                        <% if (PSDAssignment.Controller.UserController.getUserByID(Convert.ToInt32(Session["auth_user"])).RoleID == 2)
+                            {%>
+                            <li style="margin: 0px 5px;"><a href="ViewCart.aspx" style="text-decoration: none; font-size:1.7rem">View Cart</a></li>
+                   
+                        <%} %>
+                         <% if (PSDAssignment.Controller.UserController.getUserByID(Convert.ToInt32(Session["auth_user"])).RoleID == 3)
+                            {%>
+                            <li style="margin: 0px 5px;"><a href="ReportAllTransaction.aspx" style="text-decoration: none; font-size:1.7rem">View All Transaction Report</a></li>
+                   
+                        <%} %>
+                        <li style="margin: 0px 5px;"><a href="ViewTransactionHistory.aspx" style="text-decoration: none; font-size:1.7rem">View All Transaction History</a></li>
+                        <li style="margin: 0px 5px;"><a href="Profile.aspx" style="text-decoration: none; font-size:1.7rem">View Profile</a></li>
+                        <li style="margin: 0px 5px;">
+                            <asp:Button ID="Button1" CssClass="btn" runat="server" Text="Logout" OnClick="BtnLogout_Click" /></li>
+                 
+                    <%} %>
+    </ul>
+  </div>
+</nav>
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+        
+    </form>
+</body>
+<script src="../scripts/Index.js"></script>
+</html>

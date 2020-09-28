@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MyDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Price" Type="Int32" Nullable="false" />
+    <Property Name="Stock" Type="Int32" Nullable="false" />
+    <Property Name="ProductTypeID" Type="Int32" />
+    <NavigationProperty Name="ProductType" Relationship="Self.FK__Product__Product__38996AB5" FromRole="Product" ToRole="ProductType" />
+    <NavigationProperty Name="Carts" Relationship="MyDBModel.FK__Carts__ProductID__72C60C4A" FromRole="Product" ToRole="Cart" />
+    <NavigationProperty Name="DetailTransactions" Relationship="MyDBModel.FK__DetailTra__Produ__02084FDA" FromRole="Product" ToRole="DetailTransaction" />
+  </EntityType>
+  <EntityType Name="ProductType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Products" Relationship="Self.FK__Product__Product__38996AB5" FromRole="ProductType" ToRole="Product" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="Self.FK__User__RoleID__3B75D760" FromRole="Role" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RoleID" Type="Int32" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Role" Relationship="Self.FK__User__RoleID__3B75D760" FromRole="User" ToRole="Role" />
+    <NavigationProperty Name="Carts" Relationship="MyDBModel.FK__Carts__UserID__71D1E811" FromRole="User" ToRole="Cart" />
+    <NavigationProperty Name="HeaderTransactions" Relationship="MyDBModel.FK__HeaderTra__UserI__75A278F5" FromRole="User" ToRole="HeaderTransaction" />
+  </EntityType>
+  <Association Name="FK__Product__Product__38996AB5">
+    <End Role="ProductType" Type="Self.ProductType" Multiplicity="0..1" />
+    <End Role="Product" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="ProductTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__User__RoleID__3B75D760">
+    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+    <End Role="User" Type="Self.User" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="User">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MyDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="ProductTypes" EntityType="Self.ProductType" />
+    <EntitySet Name="Roles" EntityType="Self.Role" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK__Product__Product__38996AB5" Association="Self.FK__Product__Product__38996AB5">
+      <End Role="ProductType" EntitySet="ProductTypes" />
+      <End Role="Product" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK__User__RoleID__3B75D760" Association="Self.FK__User__RoleID__3B75D760">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <EntitySet Name="Carts" EntityType="MyDBModel.Cart" />
+    <EntitySet Name="PaymentTypes" EntityType="MyDBModel.PaymentType" />
+    <AssociationSet Name="FK__Carts__ProductID__72C60C4A" Association="MyDBModel.FK__Carts__ProductID__72C60C4A">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="Cart" EntitySet="Carts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Carts__UserID__71D1E811" Association="MyDBModel.FK__Carts__UserID__71D1E811">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Cart" EntitySet="Carts" />
+    </AssociationSet>
+    <EntitySet Name="DetailTransactions" EntityType="MyDBModel.DetailTransaction" />
+    <AssociationSet Name="FK__DetailTra__Produ__02084FDA" Association="MyDBModel.FK__DetailTra__Produ__02084FDA">
+      <End Role="Product" EntitySet="Products" />
+      <End Role="DetailTransaction" EntitySet="DetailTransactions" />
+    </AssociationSet>
+    <EntitySet Name="HeaderTransactions" EntityType="MyDBModel.HeaderTransaction" />
+    <AssociationSet Name="FK__DetailTra__Trans__02FC7413" Association="MyDBModel.FK__DetailTra__Trans__02FC7413">
+      <End Role="HeaderTransaction" EntitySet="HeaderTransactions" />
+      <End Role="DetailTransaction" EntitySet="DetailTransactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HeaderTra__Payme__778AC167" Association="MyDBModel.FK__HeaderTra__Payme__778AC167">
+      <End Role="PaymentType" EntitySet="PaymentTypes" />
+      <End Role="HeaderTransaction" EntitySet="HeaderTransactions" />
+    </AssociationSet>
+    <AssociationSet Name="FK__HeaderTra__UserI__75A278F5" Association="MyDBModel.FK__HeaderTra__UserI__75A278F5">
+      <End Role="User" EntitySet="Users" />
+      <End Role="HeaderTransaction" EntitySet="HeaderTransactions" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Cart">
+    <Key>
+      <PropertyRef Name="UserID" />
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="MyDBModel.FK__Carts__ProductID__72C60C4A" FromRole="Cart" ToRole="Product" />
+    <NavigationProperty Name="User" Relationship="MyDBModel.FK__Carts__UserID__71D1E811" FromRole="Cart" ToRole="User" />
+  </EntityType>
+  <EntityType Name="PaymentType">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="HeaderTransactions" Relationship="MyDBModel.FK__HeaderTra__Payme__778AC167" FromRole="PaymentType" ToRole="HeaderTransaction" />
+  </EntityType>
+  <Association Name="FK__Carts__ProductID__72C60C4A">
+    <End Type="MyDBModel.Product" Role="Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.Cart" Role="Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Carts__UserID__71D1E811">
+    <End Type="MyDBModel.User" Role="User" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.Cart" Role="Cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Cart">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="DetailTransaction">
+    <Key>
+      <PropertyRef Name="TransactionID" />
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="TransactionID" Type="Int32" Nullable="false" />
+    <Property Name="ProductID" Type="Int32" Nullable="false" />
+    <Property Name="Quantity" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Product" Relationship="MyDBModel.FK__DetailTra__Produ__02084FDA" FromRole="DetailTransaction" ToRole="Product" />
+    <NavigationProperty Name="HeaderTransaction" Relationship="MyDBModel.FK__DetailTra__Trans__02FC7413" FromRole="DetailTransaction" ToRole="HeaderTransaction" />
+  </EntityType>
+  <Association Name="FK__DetailTra__Produ__02084FDA">
+    <End Type="MyDBModel.Product" Role="Product" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.DetailTransaction" Role="DetailTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Product">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailTransaction">
+        <PropertyRef Name="ProductID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="HeaderTransaction">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" />
+    <Property Name="PaymentTypeID" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="DetailTransactions" Relationship="MyDBModel.FK__DetailTra__Trans__02FC7413" FromRole="HeaderTransaction" ToRole="DetailTransaction" />
+    <NavigationProperty Name="PaymentType" Relationship="MyDBModel.FK__HeaderTra__Payme__778AC167" FromRole="HeaderTransaction" ToRole="PaymentType" />
+    <NavigationProperty Name="User" Relationship="MyDBModel.FK__HeaderTra__UserI__75A278F5" FromRole="HeaderTransaction" ToRole="User" />
+  </EntityType>
+  <Association Name="FK__DetailTra__Trans__02FC7413">
+    <End Type="MyDBModel.HeaderTransaction" Role="HeaderTransaction" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.DetailTransaction" Role="DetailTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HeaderTransaction">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DetailTransaction">
+        <PropertyRef Name="TransactionID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HeaderTra__Payme__778AC167">
+    <End Type="MyDBModel.PaymentType" Role="PaymentType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.HeaderTransaction" Role="HeaderTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="PaymentType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="HeaderTransaction">
+        <PropertyRef Name="PaymentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__HeaderTra__UserI__75A278F5">
+    <End Type="MyDBModel.User" Role="User" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Type="MyDBModel.HeaderTransaction" Role="HeaderTransaction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="HeaderTransaction">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
